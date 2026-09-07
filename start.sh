@@ -67,7 +67,7 @@ nohup llama-server \
   --jinja \
   -ngl 99 \
   -fa on \
-  -c 64000 \
+  -c 90000 \
   --cache-type-k q4_0 \
   --cache-type-v q4_0 \
   --reasoning-effort medium \
