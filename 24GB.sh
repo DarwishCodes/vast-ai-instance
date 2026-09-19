@@ -37,7 +37,7 @@ if [ "$COMPUTE_CAP" = "61" ]; then
     echo "Pascal GPU detected (compute 6.1) — using custom Pascal build"
     PASCAL_URL="https://github.com/DarwishCodes/vast-ai-instance/releases/download/titan/llama.cpp-0.4.1-dev-cuda-12.8-pascal-amd64.tar.gz"
     wget -q --show-progress "$PASCAL_URL"
-    tar -xzf "llama.cpp-b5555-cuda-12.8-pascal-amd64.tar.gz"
+    tar -xzf "llama.cpp-0.4.1-dev-cuda-12.8-pascal-amd64.tar.gz"
 else
     echo "Modern GPU detected (compute $COMPUTE_CAP) — using ai-dock release"
     LATEST=$(curl -s https://api.github.com/repos/ai-dock/llama.cpp-cuda/releases/latest | grep tag_name | cut -d'"' -f4)
