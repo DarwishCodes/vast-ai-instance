@@ -27,20 +27,29 @@ apt-get install -y cuda-cudart-12-8 libcublas-12-8 libnccl2 libgomp1
 echo "/usr/local/cuda-12.8/lib64" > /etc/ld.so.conf.d/cuda.conf
 ldconfig
 
-echo "=== 2. Fetching Latest llama.cpp Binary ==="
+echo "=== 2. Fetching llama.cpp Binary ==="
 cd /tmp
-LATEST=$(curl -s https://api.github.com/repos/ai-dock/llama.cpp-cuda/releases/latest | grep tag_name | cut -d'"' -f4)
-echo "Downloading release: ${LATEST}"
 
-wget -q --show-progress "https://github.com/ai-dock/llama.cpp-cuda/releases/download/${LATEST}/llama.cpp-${LATEST}-cuda-12.8-amd64.tar.gz"
-tar -xzf "llama.cpp-${LATEST}-cuda-12.8-amd64.tar.gz"
+# Detect GPU architecture
+COMPUTE_CAP=$(nvidia-smi --query-gpu=compute_cap --format=csv,noheader | head -1 | tr -d '.')
 
-# Copy all executables and shared libraries
+if [ "$COMPUTE_CAP" = "61" ]; then
+    echo "Pascal GPU detected (compute 6.1) — using custom Pascal build"
+    PASCAL_URL="https://github.com/DarwishCodes/vast-ai-instance/releases/download/titan/llama.cpp-0.4.1-dev-cuda-12.8-pascal-amd64.tar.gz"
+    wget -q --show-progress "$PASCAL_URL"
+    tar -xzf "llama.cpp-b5555-cuda-12.8-pascal-amd64.tar.gz"
+else
+    echo "Modern GPU detected (compute $COMPUTE_CAP) — using ai-dock release"
+    LATEST=$(curl -s https://api.github.com/repos/ai-dock/llama.cpp-cuda/releases/latest | grep tag_name | cut -d'"' -f4)
+    echo "Downloading release: ${LATEST}"
+    wget -q --show-progress "https://github.com/ai-dock/llama.cpp-cuda/releases/download/${LATEST}/llama.cpp-${LATEST}-cuda-12.8-amd64.tar.gz"
+    tar -xzf "llama.cpp-${LATEST}-cuda-12.8-amd64.tar.gz"
+fi
+
+# Same for both paths
 cp -a cuda-12.8/*.so* /usr/local/lib/ 2>/dev/null || true
 cp -a cuda-12.8/llama-* /usr/local/bin/
 chmod +x /usr/local/bin/llama-*
-
-# Refresh linker cache
 ldconfig
 
 echo "Checking binary version:"
