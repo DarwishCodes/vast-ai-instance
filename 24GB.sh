@@ -35,7 +35,7 @@ COMPUTE_CAP=$(nvidia-smi --query-gpu=compute_cap --format=csv,noheader | head -1
 
 if [ "$COMPUTE_CAP" = "61" ]; then
     echo "Pascal GPU detected (compute 6.1) — using custom Pascal build"
-    PASCAL_URL="https://github.com/DarwishCodes/vast-ai-instance/releases/download/titan/llama.cpp-0.4.1-dev-cuda-12.8-pascal-amd64.tar.gz"
+    PASCAL_URL="https://github.com/DarwishCodes/vast-ai-instance/releases/download/titanv2/llama.cpp-0.4.1-dev-cuda-12.8-pascal-amd64.tar.gz"
     wget -q --show-progress "$PASCAL_URL"
     tar -xzf "llama.cpp-0.4.1-dev-cuda-12.8-pascal-amd64.tar.gz"
 else
