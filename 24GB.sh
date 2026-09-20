@@ -79,17 +79,19 @@ nohup llama-server \
   --fit on \
   -c 90000 \
   --cache-type-k q8_0 \
-  -ctv q8_0 \
-  -b 1024 \
+  -b 2048 \
   -ub 512 \
   -t 6 \
   -tb 6 \
+  --spec-draft-n-max 3
   --no-warmup \
-  --spec-type ngram-mod \
+  --spec-type draft-mtp \
+  --parallel 1 \
   --temp 1 \
   --top-k 20 \
   --min-p 0 \
   --top-p 0.95 \
+  --repeat-penalty 1.05 \
   --host 0.0.0.0 \
   --port 11434 \
   > "$LOG_FILE" 2>&1 &
