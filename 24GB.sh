@@ -76,11 +76,20 @@ nohup llama-server \
   --jinja \
   -ngl 99 \
   -fa on \
+  --fit on \
   -c 90000 \
   --cache-type-k q8_0 \
-  --reasoning-effort medium \
-  --reasoning-preserve \
-  -s 1 \
+  -ctv q8_0 \
+  -b 1024 \
+  -ub 512 \
+  -t 6 \
+  -tb 6 \
+  --no-warmup \
+  --spec-type ngram-mod \
+  --temp 1 \
+  --top-k 20 \
+  --min-p 0 \
+  --top-p 0.95 \
   --host 0.0.0.0 \
   --port 11434 \
   > "$LOG_FILE" 2>&1 &
